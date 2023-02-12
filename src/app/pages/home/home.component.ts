@@ -9,10 +9,10 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomeComponent {
 
-  // constructor(private http:HttpClient,private route:ActivatedRoute){}
+  constructor(private http:HttpClient,private route:ActivatedRoute){}
 
-  // ngOnInit():void{
+  ngOnInit():void{
     
-  // }
+  }
 
 }
