@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MusicMatchService } from 'src/app/services/musicmatch-service.service';
 
 @Component({
   selector: 'app-home',
@@ -10,20 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 export class HomeComponent {
 
   public songs: any[] = [];
-  constructor(private http:HttpClient,private route:ActivatedRoute){}
+  constructor(private http:HttpClient,private route:ActivatedRoute, private musicMatchService: MusicMatchService){}
 
-  // ngOnInit():void{
-    // const accessToken = localStorage.getItem('token');
-
-    // // Use the access token to make requests to the Spotify Web API
-    // this.http.get('https://api.spotify.com/v1/me/player/recently-played', {
-    //   headers: {
-    //     'Authorization': 'Bearer ' + accessToken
-    //   }
-    // }).subscribe(response => {
-    //   console.log(response);
-    // });
-    
 
     
   
@@ -42,8 +31,23 @@ export class HomeComponent {
             image: item.track.album.images[0].url
           };
         });
+        // Loop through the songs array and make an API call to Musixmatch for each song
+        this.songs.forEach((song) => {
+          const searchUrl = `https://crossorigin.me/https://api.musixmatch.com/ws/1.1/track.search?q_track=${song.name}&q_artist=${song.artist}&apikey=<YOUR_API_KEY>`;
+          this.http.get(searchUrl).subscribe((response: any) => {
+            const trackList = response.message.body.track_list;
+            if (trackList.length > 0) {
+              const trackId = trackList[0].track.track_id;
+              const lyricsUrl = `https://crossorigin.me/https://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=${trackId}&apikey=<YOUR_API_KEY>`;
+              this.http.get(lyricsUrl).subscribe((response: any) => {
+                const lyrics = response.message.body.lyrics.lyrics_body;
+                // Here you can analyze the lyrics to determine the mood of the song
+                console.log(lyrics);
+              });
+            }
+          });
+        });
       });
     }
   }
-
 

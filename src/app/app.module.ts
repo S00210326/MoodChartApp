@@ -8,6 +8,7 @@ import { SpotifyAuthServiceService } from './services/spotify-auth-service.servi
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './pages/home/home.component';
 import { NavbarComponent } from './pages/navbar/navbar.component';
+import { MusicMatchService } from './services/musicmatch-service.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +23,7 @@ import { NavbarComponent } from './pages/navbar/navbar.component';
   ],
   providers: [
     // SpotifyAuthServiceService
+    MusicMatchService
   ],
   bootstrap: [AppComponent]
 })
